@@ -11,5 +11,11 @@ class LoaderHTML(LoaderBase):
         raise NotImplementedError
     
     def extract_text(self):
-        raise NotImplementedError("Implement LoaderHTML.extract_text() to extract text from a HTML file.")
-            
+        text_maker = html2text.HTML2Text()
+        text_maker.ignore_links = True
+        text_maker.bypass_tables = False
+        html = "".join(open(self.filepath, "r", encoding="utf-8").readlines())
+        text = text_maker.handle(html)
+        with open("a.txt", "w+", encoding="utf-8") as file:
+            file.write(text)
+        return text

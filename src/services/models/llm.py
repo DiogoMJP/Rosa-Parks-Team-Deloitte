@@ -29,7 +29,7 @@ class LLM():
         self.model_name = os.getenv("AZURE_LLM_MODEL_NAME")
 
 
-    def get_response(self, history, context, user_input, temperature):
+    def get_response(self, history, context, user_input, temperature, n_max_tokens):
         """Generates a response from the LLM.
 
         Args:
@@ -44,6 +44,9 @@ class LLM():
         #XXX: NOT IMPLEMENTED. Use self.client.chat.completions to create the chatbot response
         # Create a completion request
 
+        if not history:
+            history.append({"role": "system", "content": "Considering the products in the context, any make sense to the quetion/ problem of the user, feel free to recomend it in your response"})
+
         history.append({"role": "system", "content": context})
 
         history.append({"role": "user", "content": user_input})
@@ -51,7 +54,8 @@ class LLM():
         response = self.client.chat.completions.create(
             model=self.model_name,
             messages=history,
-            temperature=temperature
+            temperature=temperature,
+            max_tokens=n_max_tokens
         )
 
         assistant_reply = response.choices[0].message.content

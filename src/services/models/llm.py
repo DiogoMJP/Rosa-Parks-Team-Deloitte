@@ -63,5 +63,5 @@ class LLM():
 
 #class tests
 
-llm = LLM()
-print(llm.get_response([],"none", "quais os problemas do ambiente"))
+#llm = LLM()
+#print(llm.get_response([],"none", "quais os problemas do ambiente"))

@@ -16,4 +16,14 @@ class LoaderCSV(LoaderBase):
             csvReader = csv.DictReader(file) 
             for row in csvReader: 
                 json_array.append(row)
-        return json.dumps(json_array, indent=2)
+        text = "\n".join([json.dumps(entry) for entry in json_array])
+        return text
+
+    def extract_chunks(self):
+        json_array = []
+        with open(self.filepath, 'r') as file:
+            csvReader = csv.DictReader(file) 
+            for row in csvReader: 
+                json_array.append(row)
+        chunks = [json.dumps(entry) for entry in json_array]
+        return chunks

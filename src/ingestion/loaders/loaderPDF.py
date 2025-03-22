@@ -1,4 +1,5 @@
 from src.ingestion.loaders.loaderBase import LoaderBase
+from src.ingestion.chunking.token_chunking import text_to_chunks
 from pathlib import Path
 import PyPDF2  
 import io
@@ -35,7 +36,8 @@ class LoaderPDF(LoaderBase):
         return text
     
     def extract_chunks(self):
-        raise NotImplementedError
+        text = self.extract_text()
+        return text_to_chunks(text)
 
     def all_keys_have_values(self, metadata, value_check=lambda x: x is not None and x != ''):
         return all(value_check(value) for value in metadata.values())

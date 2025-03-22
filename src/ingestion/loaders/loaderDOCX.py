@@ -1,4 +1,5 @@
 from src.ingestion.loaders.loaderBase import LoaderBase
+from src.ingestion.chunking.token_chunking import text_to_chunks
 from docx import Document
 
 class LoaderDOCX(LoaderBase):
@@ -26,3 +27,7 @@ class LoaderDOCX(LoaderBase):
         document = Document(self.filepath)
         text = "\n".join([p.text for p in document.paragraphs])
         return text
+    
+    def extract_chunks(self):
+        text = self.extract_text()
+        return text_to_chunks(text)

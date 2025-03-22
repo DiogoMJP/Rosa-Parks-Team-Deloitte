@@ -29,19 +29,39 @@ class LLM():
         self.model_name = os.getenv("AZURE_LLM_MODEL_NAME")
 
 
-    def get_response(self, history, context, user_input):
+    def get_response(self, history, context, user_input, temperature):
         """Generates a response from the LLM.
 
         Args:
             history (list): #TODO: A list of previous messages in the conversation history.
             context (str): Relevant information from the knowledge base to provide context to the LLM.
             user_input (str): The user's current input.
+            temperature(double): temperature.
 
         Returns:
             str: The LLM's generated response.
         """
         #XXX: NOT IMPLEMENTED. Use self.client.chat.completions to create the chatbot response
+        # Create a completion request
+
+        history.append({"role": "system", "content": context})
+
+        history.append({"role": "user", "content": user_input})
+
+        response = self.client.chat.completions.create(
+            model=self.model_name,
+            messages=history,
+            temperature=temperature
+        )
+
+        assistant_reply = response.choices[0].message.content
+        history.append({"role": "assistant", "content": assistant_reply})
+
+        return assistant_reply, history
 
         #TODO (EXTRA: stream LLM response)
 
-        return "<AI RESPONSE PLACEHOLDER>"
+#class tests
+
+#llm = LLM()
+#print(llm.get_response([],"none", "quais os problemas do ambiente"))

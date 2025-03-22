@@ -5,13 +5,11 @@ import faiss
 from openai import AzureOpenAI
 from src.services.models.embeddings import Embeddings
 from src.services.vectorial_db.faiss_index import FAISSIndex
-from src.ingestion.ingest_files import ingest_files_data_folder
 from src.services.models.llm import LLM
 import os
-from dotenv import load_dotenv
 import time
 
-def rag_chatbot(llm: LLM, input_text:str, history: list, index: FAISSIndex):
+def rag_chatbot(llm: LLM, input_text: str, history: list, index: FAISSIndex):
     """Retrieves relevant information from the FAISS index, generates a response using the LLM, and manages the conversation history.
 
     Args:
@@ -24,13 +22,24 @@ def rag_chatbot(llm: LLM, input_text:str, history: list, index: FAISSIndex):
         tuple: A tuple containing the AI's response and the updated conversation history.
     """
 
-    #TODO Retrieve context from the FAISS Index
-    
-    #TODO Pass retrieve context to the LLM as well as history
+    # Retrieve context from the FAISS Index
+    def retrieve_context(query, k=3):
+        context = index.retrieve_chunks(query, k)  
+        return context
 
-    #TODO History management: add user query and response to history
-    
-    return "_AI Response Placeholder_", history
+    # Generate a response using the LLM
+    def generate_response(query, context, history):
+        context_str = "\n".join(context)  
+
+        # Get the response and updated history from the LLM
+        response, updated_history = llm.get_response(history, context_str, query)  
+        
+        return response, updated_history
+
+    context = retrieve_context(input_text)
+    ai_response, history = generate_response(input_text, context, history)
+
+    return ai_response, history
 
 
 def main():
@@ -38,25 +47,25 @@ def main():
 
     embeddings = Embeddings()
     
+    # Initialize the FAISS index with the embeddings function
     index = FAISSIndex(embeddings=embeddings.get_embeddings)
 
     try:
-        index.load_index()
+        index.load_index()  # Try to load the FAISS index from disk
     except FileNotFoundError:
         raise ValueError("Index not found. You must ingest documents first.")
 
-    llm = LLM()
-    history = []
-    print("\n# INTIALIZED CHATBOT #")
+    llm = LLM()  # Initialize the LLM (assumed to be a wrapper for the Azure OpenAI API)
+    history = []  # Start with an empty conversation history
+    print("\n# INITIALIZED CHATBOT #")
 
     while True:
-        user_input = str(input("You:  "))
-        if user_input.lower() == "exit":
+        user_input = str(input("You:  "))  # Get user input
+        if user_input.lower() == "exit":  # Exit the loop if user types 'exit'
             break
-        response, history = rag_chatbot(llm, user_input, history, index)
         
+        response, history = rag_chatbot(llm, user_input, history, index)  # Get AI response and updated history
         print("AI: ", response)
-
 
 if __name__ == "__main__":
     main()

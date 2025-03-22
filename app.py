@@ -81,35 +81,41 @@ def process(history):
 # Custom CSS for styling the chatbot
 custom_css = """
 #chatbot {
-    height: 70vh !important;
+    height: 50vh !important;
+    color: Aquamarine;
 }
 """
 
+
 # Create the Gradio interface
-with gr.Blocks(css=custom_css) as demo:
+with gr.Blocks(theme=gr.themes.Ocean()) as demo:
     # Chatbot UI element
     chatbot_ui = gr.Chatbot(
         [],
         type="messages",
         elem_id="chatbot",
         bubble_full_width=True,
-        height=800,
+        height=400,
         avatar_images=((r"img/user.png"), (r"img/gpt.png")),
+        
     )
 
     with gr.Row():
         # Text input box
         txt = gr.Textbox(
-            scale=4,
+            scale=5,
             show_label=False,
-            placeholder="Enter text and press enter, or upload an image",
+            placeholder="Enter your question here",
             container=False,
+           
+
         )
 
     with gr.Row():
         # Sliders for temperature and max tokens
         temperature = gr.Slider(0.0, 2, value=1, label="Temperature")
         max_tokens = gr.Slider(1, 1000, value=800, label="Max Tokens")
+
 
     # Register slider values (currently placeholder functions)
     t = temperature.release(update_temperature, inputs=[temperature])

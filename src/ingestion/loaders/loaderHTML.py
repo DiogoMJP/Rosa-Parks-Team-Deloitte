@@ -1,4 +1,5 @@
 from src.ingestion.loaders.loaderBase import LoaderBase
+from src.ingestion.chunking.token_chunking import text_to_chunks
 import html2text
 
 class LoaderHTML(LoaderBase):
@@ -17,3 +18,7 @@ class LoaderHTML(LoaderBase):
         html = "".join(open(self.filepath, "r", encoding="utf-8").readlines())
         text = text_maker.handle(html)
         return text
+    
+    def extract_chunks(self):
+        text = self.extract_text()
+        return text_to_chunks(text)

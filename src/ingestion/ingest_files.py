@@ -12,9 +12,9 @@ def ingest_files_data_folder(index: FAISSIndex):
             # ignore directories
             continue
         loader = Loader(extension=file.split(".")[-1], filepath=os.path.join(DATA_FOLDER, file))
-        text = loader.extract_text()
+        chunks = loader.extract_chunks()
         print(f"Ingesting {file}")
-        index.ingest_text(text=text)
+        index.ingest_text(text_chunks=chunks)
 
 if __name__ == "__main__":
     from dotenv import load_dotenv

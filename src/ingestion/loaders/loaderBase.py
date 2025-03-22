@@ -12,6 +12,7 @@ class LoaderBase(ABC):
         __init__(filepath: str): Constructor for the LoaderBase class.
         extract_metadata(): Abstract method to extract metadata from a file.
         extract_text(): Abstract method to extract text content from a file.
+        extract_chunks(): Abstract method to extract chunks from a file.
     """
     @abstractmethod
     def __init__(self, filepath:str):
@@ -40,5 +41,15 @@ class LoaderBase(ABC):
 
         Returns:
             str: The extracted text from the file.
+        """
+        pass
+
+    @abstractmethod
+    def extract_chunks(self):
+        """
+        Abstract method to extract the chunks from a file.
+
+        Returns:
+            list[str]: The extracted chunks from the file.
         """
         pass

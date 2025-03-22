@@ -65,3 +65,11 @@ class Loader:
             str: The extracted text from the file.
         """
         return self.loader.extract_text()
+
+    def extract_chunks(self):
+        """Extracts chunks from the file using the specific loader.
+
+        Returns:
+            list[str]: The extracted chunks from the file.
+        """
+        return self.loader.extract_chunks()

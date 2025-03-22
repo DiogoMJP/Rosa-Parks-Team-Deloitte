@@ -16,6 +16,4 @@ class LoaderHTML(LoaderBase):
         text_maker.bypass_tables = False
         html = "".join(open(self.filepath, "r", encoding="utf-8").readlines())
         text = text_maker.handle(html)
-        with open("a.txt", "w+", encoding="utf-8") as file:
-            file.write(text)
         return text

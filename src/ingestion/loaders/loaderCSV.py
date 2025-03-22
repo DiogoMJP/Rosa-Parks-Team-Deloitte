@@ -1,4 +1,6 @@
 from src.ingestion.loaders.loaderBase import LoaderBase
+import csv
+import json
 
 class LoaderCSV(LoaderBase):
 
@@ -9,4 +11,9 @@ class LoaderCSV(LoaderBase):
         raise NotImplementedError
     
     def extract_text(self):
-        raise NotImplementedError("Implement LoaderCSV.extract_text() to extract text from a CSV file.")            
+        json_array = []
+        with open(self.filepath, 'r') as file:
+            csvReader = csv.DictReader(file) 
+            for row in csvReader: 
+                json_array.append(row)
+        return json.dumps(json_array, indent=2)

@@ -2,6 +2,7 @@ from src.ingestion.loaders.loaderBase import LoaderBase
 from src.ingestion.loaders.loaderDOCX import LoaderDOCX
 from src.ingestion.loaders.loaderHTML import LoaderHTML
 from src.ingestion.loaders.loaderPDF import LoaderPDF
+from src.ingestion.loaders.loaderCSV import LoaderCSV
 
 class Loader:
     """
@@ -44,6 +45,8 @@ class Loader:
                 return LoaderHTML(self.filepath)
             case "docx":
                 return LoaderDOCX(self.filepath)
+            case "csv":
+                return LoaderCSV(self.filepath)
             case _:
                 raise ValueError(f"Not a supported extension: {self.extension}")
 

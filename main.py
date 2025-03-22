@@ -1,4 +1,6 @@
 from dotenv import load_dotenv
+
+from app import update_max_tokens, update_temperature
 load_dotenv(override=True)
 
 import faiss
@@ -9,7 +11,7 @@ from src.services.models.llm import LLM
 import os
 import time
 
-def rag_chatbot(llm: LLM, input_text: str, history: list, index: FAISSIndex):
+def rag_chatbot(llm: LLM, input_text: str, history: list, index: FAISSIndex, temp: temperature):
     """Retrieves relevant information from the FAISS index, generates a response using the LLM, and manages the conversation history.
 
     Args:
@@ -30,9 +32,10 @@ def rag_chatbot(llm: LLM, input_text: str, history: list, index: FAISSIndex):
     # Generate a response using the LLM
     def generate_response(query, context, history):
         context_str = "\n".join(context)  
-
+        temperature = update_temperature()
+        tokens = update_max_tokens()
         # Get the response and updated history from the LLM
-        response, updated_history = llm.get_response(history, context_str, query)  
+        response, updated_history = llm.get_response(history, context_str, query, temperature, tokens)  
         
         return response, updated_history
 

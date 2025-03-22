@@ -41,7 +41,29 @@ class LLM():
             str: The LLM's generated response.
         """
         #XXX: NOT IMPLEMENTED. Use self.client.chat.completions to create the chatbot response
+        # Create a completion request
+        # messages = [{"role": "system", "content": context}] + history + [{"role": "user", "content": user_input}]
+                # Add system context if history is empty
+
+        history.append({"role": "system", "content": context})
+
+        # Add the new user message
+        history.append({"role": "user", "content": user_input})
+
+        response = self.client.chat.completions.create(
+            model=self.model_name,
+            messages=history
+        )
+
+        # Extract and save assistant response
+        assistant_reply = response.choices[0].message.content
+        history.append({"role": "assistant", "content": assistant_reply})
+
+        return assistant_reply, history
 
         #TODO (EXTRA: stream LLM response)
 
-        return "<AI RESPONSE PLACEHOLDER>"
+#class tests
+
+llm = LLM()
+print(llm.get_response([],"none", "quais os problemas do ambiente"))

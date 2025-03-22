@@ -59,13 +59,12 @@ def add_user_text(history, txt):
 def update_temperature(temperature):
     """Placeholder function for updating temperature."""
     # Not Implemented
-    return temperature
-
+    llm.set_temperature(temperature)
 
 def update_max_tokens(max_tokens):
     """Placeholder function for updating max tokens."""
     # Not Implemented
-    return max_tokens
+    llm.set_tokens(max_tokens)
 
 
 def add_file(history, file_obj):
@@ -121,6 +120,7 @@ with gr.Blocks(theme=gr.themes.Ocean()) as demo:
     t = temperature.release(update_temperature, inputs=[temperature])
     mt = max_tokens.release(update_max_tokens, inputs=[max_tokens])
 
+    
     # Define the event chain: submit text -> add to history -> call chatbot_wrapper -> clear textbox
     txt_msg = txt.submit(add_user_text, [chatbot_ui, txt], [chatbot_ui, txt]).then(
         chatbot_wrapper, [txt, chatbot_ui], [chatbot_ui, txt], queue=False

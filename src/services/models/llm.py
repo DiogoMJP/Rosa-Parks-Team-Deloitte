@@ -27,9 +27,11 @@ class LLM():
             api_key=api_key
         )
         self.model_name = os.getenv("AZURE_LLM_MODEL_NAME")
+        self.tokens = 800
+        self.temperature = 1.0
 
 
-    def get_response(self, history, context, user_input, temperature, n_max_tokens):
+    def get_response(self, history, context, user_input):
         """Generates a response from the LLM.
 
         Args:
@@ -54,8 +56,8 @@ class LLM():
         response = self.client.chat.completions.create(
             model=self.model_name,
             messages=history,
-            temperature=temperature,
-            max_tokens=n_max_tokens
+            temperature=self.temperature,
+            max_tokens=self.tokens
         )
 
         assistant_reply = response.choices[0].message.content
@@ -64,6 +66,12 @@ class LLM():
         return assistant_reply, history
 
         #TODO (EXTRA: stream LLM response)
+
+    def set_temperature(self, temperature):
+        self.temperature = temperature
+    def set_tokens(self, tokens):
+        self.tokens = tokens
+
 
 #class tests
 

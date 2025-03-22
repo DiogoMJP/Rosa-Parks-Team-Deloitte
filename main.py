@@ -36,7 +36,7 @@ def rag_chatbot(llm: LLM, input_text: str, history: list, index: FAISSIndex):
         context_str = "\n".join(context)  
         # Get the response and updated history from the LLM
         
-        response, updated_history = llm.get_response(history, context_str, query,temperature, token)  
+        response, updated_history = llm.get_response(history, context_str, query)  
         
         return response, updated_history
 
